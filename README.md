@@ -10,7 +10,6 @@ Running:
 ```
 $ pip install pipenv
 $ pipenv install
-$ source .env
 $ pipenv run flask run
 ```
 

@@ -1,6 +1,7 @@
+import os
 import discord
 import asyncio
-from cogs.commands import commands
+from dreamfarm.bot.cogs.commands import commands
 
 client = discord.Client()
 
@@ -20,4 +21,5 @@ async def on_message(message):
     if message.author != client.user:
         await commands(client, message)
 
-client.run('token')
+def run():
+    client.run(os.environ.get('DISCORD_API_KEY'))

@@ -8,6 +8,9 @@ name = "pypi"
 [packages]
 
 requests = "*"
+"discord.py" = "*"
+pillow = "*"
+flask = "*"
 
 
 [dev-packages]

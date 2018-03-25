@@ -17,3 +17,5 @@ class Plot:
 
     def set_tile(self, coords, id):
         return 0
+
+    # def render(self):

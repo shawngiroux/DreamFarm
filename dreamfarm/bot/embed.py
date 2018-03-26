@@ -6,14 +6,15 @@ import os
 import logging
 from dreamfarm.bot.log import logger
 
-class EmbedBuilder:
-    api_host = os.environ.get('API_HOST')
+api_host = os.environ.get('API_HOST')
 
+class EmbedBuilder:
     async def get_plot_image_url(self, user_id):
+        global api_host
         params = {
             'user_id': user_id
         }
-        response = requests.post(EmbedBuilder.api_host + '/plot-img-url', data=json.dumps(params))
+        response = requests.post(api_host + '/plot-img-url', data=json.dumps(params))
 
         if (response.status_code == 200):
             return response.text

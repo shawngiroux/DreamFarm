@@ -4,6 +4,8 @@ import asyncio
 from dreamfarm.bot.commands import commands
 
 client = discord.Client()
+api_key = os.environ.get('DISCORD_API_KEY')
+api_host = os.environ.get('API_HOST')
 
 @client.event
 async def on_ready():
@@ -22,4 +24,4 @@ async def on_message(message):
         await commands(client, message)
 
 def run():
-    client.run(os.environ.get('DISCORD_API_KEY'))
+    client.run(api_key)

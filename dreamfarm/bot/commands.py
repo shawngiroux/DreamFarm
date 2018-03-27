@@ -30,6 +30,11 @@ async def commands(client, message):
             logger.warn('ERROR: register; user %s; %s %s', user_id, response.status_code, response.reason)
             return ''
 
+    if message.content.startswith('$show'):
+        builder = EmbedBuilder()
+        embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, [])
+        await client.send_message(message.channel, embed=embed)
+
     if message.content.startswith('$corn'):
         builder = EmbedBuilder()
         embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, [])

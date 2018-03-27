@@ -25,7 +25,8 @@ class EmbedBuilder:
     async def build(self, title, description, user_id, fields):
         embed = discord.Embed(title=title, description=description, color=0x4c9265)
 
-        url = await self.get_plot_image_url(user_id)
+        url = api_host + '/get-current-plot?duid=' + user_id
+        print(url)
         embed.set_image(url=url)
 
         for field in fields:

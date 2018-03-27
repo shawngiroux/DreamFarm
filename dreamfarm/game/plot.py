@@ -35,7 +35,7 @@ class Plot:
         for y in range(16):
             for x in range(20):
                 id = self.tiles[y][x].id
-                tex = Textures.get_image(id)
+                tex = Textures.get_image(Tile.lookup_by_id[id])
                 x1 = x * 16
                 x2 = x1 + 16
                 y1 = y * 16

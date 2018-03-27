@@ -1,18 +1,12 @@
-tile_ids = [
-
-]
-
-tile_textures = [
-    {
-        'name': 'corn',
-        'tex': (14, 15)
-    }
-]
-
 class Tile:
-    id = 0
-    x = 0
-    y = 0
+    lookup_by_id = []
+    lookup_by_name = {}
+
+    @staticmethod
+    def create_lookups(data):
+        for i in range(len(data)):
+            Tile.lookup_by_id.append(data[i])
+            Tile.lookup_by_name[data[i]] = i
 
     def __init__(self, id, x, y):
         self.id = id

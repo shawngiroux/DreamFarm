@@ -27,7 +27,6 @@ class EmbedBuilder:
         embed = discord.Embed(title=title, description=description, color=0x4c9265)
 
         url = remote_host + '/get-current-plot?duid=' + user_id
-        print(url)
         embed.set_image(url=url)
 
         for field in fields:

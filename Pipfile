@@ -12,6 +12,7 @@ requests = "*"
 pillow = "*"
 flask = "*"
 mysqlclient = "*"
+redis = "*"
 
 
 [dev-packages]

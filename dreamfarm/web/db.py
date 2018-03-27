@@ -1,5 +1,6 @@
 import os
 import MySQLdb
+import warnings
 
 # Initialize the database schema if not set up already and return a connection object
 class DB:
@@ -15,6 +16,8 @@ class DB:
 
         conn = MySQLdb.connect(host=host, port=port, user=user, passwd=passwd, db=db)
         cursor = conn.cursor()
+
+        warnings.filterwarnings('ignore', category=MySQLdb.Warning)
 
         try:
             cursor.execute("""CREATE TABLE IF NOT EXISTS `users` (

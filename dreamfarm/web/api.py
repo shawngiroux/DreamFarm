@@ -1,4 +1,5 @@
 from flask import Blueprint, request, send_file
+from dreamfarm.web.db import DB
 from dreamfarm.game.farm import Farm
 from dreamfarm.game.plot import Plot
 import os
@@ -6,19 +7,11 @@ import MySQLdb
 
 api = Blueprint('api', __name__)
 
-host = os.environ.get('DB_HOST')
-port = int(os.environ.get('DB_PORT'))
-db = os.environ.get('DB_NAME')
-user = os.environ.get('DB_USER')
-passwd = os.environ.get('DB_PASSWD')
-
-conn = MySQLdb.connect(host=host, port=port, user=user, passwd=passwd, db=db)
-
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     if 'user_id' in data and 'user_name' in data:
-        cursor = conn.cursor()
+        cursor = DB.conn.cursor()
         cursor.execute("""SELECT * FROM users WHERE duid=%s""", (data['user_id'],))
         if cursor.fetchone() is None:
             try:
@@ -29,10 +22,10 @@ def register():
                     cursor.execute("""INSERT INTO plots (duid, tile_data) VALUES (%s, %s)""", (data['user_id'], plot))
                     cursor.execute("""INSERT INTO farms (duid, plot_id, plot_num) VALUES(%s, %s, %s)""", (data['user_id'], cursor.lastrowid, i))
 
-                conn.commit()
+                DB.conn.commit()
                 return 'Welcome to your DREAM FARM, ' + data['user_name'] + '!', 200
             except:
-                conn.rollback()
+                DB.conn.rollback()
                 return 'DB exception', 400
         else:
             return data['user_name'] + ' is already playing!', 200
@@ -45,7 +38,7 @@ def get_plot():
     plot_num = request.args.get('num')
 
     if user_id is not None and plot_num is not None:
-        cursor = conn.cursor()
+        cursor = DB.conn.cursor()
 
         # Ground layer
         cursor.execute("""SELECT DISTINCT farms.plot_id, plots.tile_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s AND farms.plot_num=%s""", (user_id, plot_num))
@@ -66,7 +59,7 @@ def get_current_plot():
     user_id = request.args.get('duid')
 
     if user_id is not None:
-        cursor = conn.cursor()
+        cursor = DB.conn.cursor()
 
         cursor.execute("""SELECT current_plot_num FROM users WHERE duid=%s""", (user_id,))
         row = cursor.fetchone()

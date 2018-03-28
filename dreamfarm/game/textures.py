@@ -16,7 +16,7 @@ class Textures:
             y1 = 16 * ty
             y2 = y1 + 16
             key = tile.decode('utf-8').replace('tile', 'tex')
-            Redis.pstore(key, Textures.atlas.copy().crop((x1, y1, x2, y2)))
+            Redis.pstore(key, Textures.atlas.copy().crop((x1, y1, x2, y2)).resize((17, 17)))
             Redis.conn.sadd('textures', key)
 
     @staticmethod

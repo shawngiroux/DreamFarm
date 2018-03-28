@@ -1,0 +1,26 @@
+{
+	"corn": {
+		"data": {
+			"lifespan": 3600,
+			"value": 100,
+			"texture_x": 1,
+			"texture_y": 7
+		}
+	},
+	"watermelon": {
+		"data": {
+			"lifespan": 3600,
+			"value": 100,
+			"texture_x": 2,
+			"texture_y": 3
+		}
+	},
+	"pineapple": {
+		"data": {
+			"lifespan": 3600,
+			"value": 100,
+			"texture_x": 2,
+			"texture_y": 7
+		}
+	}
+}

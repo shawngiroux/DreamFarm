@@ -4,6 +4,7 @@ import redis
 from dreamfarm.game.redis import Redis
 from dreamfarm.game.textures import Textures
 from dreamfarm.game.tile import Tile
+from dreamfarm.game.crop import Crop
 
 def initialize():
     print('Initializing redis...')
@@ -19,6 +20,17 @@ def initialize():
         Redis.conn.sadd('tiles', key)
 
     Tile.create_lookups(list(tiles.keys()))
+
+    # Initialize crop data
+    print('Loading crop data...')
+    crops = json.load(open(os.path.realpath('./dreamfarm/game/data/crops.json')))
+
+    for name, crop in crops.items():
+        key = 'crop_' + name
+        Redis.conn.hmset(key, crop['data'])
+        Redis.conn.sadd('crops', key)
+
+    Crop.create_lookups(list(crops.keys()))
 
     print('Pre-rendering textures...')
     Textures.initialize()

@@ -4,10 +4,12 @@ import requests
 import json
 import logging
 import os
+import binascii
 from dreamfarm.bot.log import logger
 from dreamfarm.bot.embed import EmbedBuilder
 
 api_host = os.environ.get('API_HOST')
+remote_host = os.environ.get('REMOTE_HOST')
 
 # List of bot commands supplied by the user
 async def commands(client, message):
@@ -30,12 +32,8 @@ async def commands(client, message):
             logger.warn('ERROR: register; user %s; %s %s', user_id, response.status_code, response.reason)
             return ''
 
-    if message.content.startswith('$show'):
+    if message.content.startswith('$show') or message.content.startswith('$corn'):
+        url = remote_host + '/get-current-plot?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
         builder = EmbedBuilder()
-        embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, [])
-        await client.send_message(message.channel, embed=embed)
-
-    if message.content.startswith('$corn'):
-        builder = EmbedBuilder()
-        embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, [])
+        embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, url, [])
         await client.send_message(message.channel, embed=embed)

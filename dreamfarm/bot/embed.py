@@ -3,6 +3,7 @@ import asyncio
 import requests
 import json
 import os
+import binascii
 import logging
 from dreamfarm.bot.log import logger
 
@@ -26,7 +27,7 @@ class EmbedBuilder:
     async def build(self, title, description, user_id, fields):
         embed = discord.Embed(title=title, description=description, color=0x4c9265)
 
-        url = remote_host + '/get-current-plot?duid=' + user_id + '?v=' + os.urandom(16).decode('utf-8')
+        url = remote_host + '/get-current-plot?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
         embed.set_image(url=url)
 
         for field in fields:

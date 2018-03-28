@@ -31,16 +31,21 @@ class Plot:
         return 0
 
     def render(self):
-        img = Image.new('RGBA', (16 * 20, 16 * 16))
+        img = Image.new('RGBA', (341, 273), 0xffffff)
+
         for y in range(16):
             for x in range(20):
                 id = self.tiles[y][x].id
                 tex = Textures.get_image(Tile.lookup_by_id[id])
-                x1 = x * 16
+                x1 = x * 17 + 1
                 x2 = x1 + 16
-                y1 = y * 16
+                y1 = y * 17 + 1
                 y2 = y1 + 16
                 img.paste(tex, (x1, y1, x2, y2))
+
+        grid = Image.open(os.path.realpath('./dreamfarm/game/assets/grid.png'))
+        img.paste(grid, (0, 0), mask=grid)
+
         ret = io.BytesIO()
         img.save(ret, format='PNG')
         ret.seek(0)

@@ -31,7 +31,7 @@ class Plot:
         return 0
 
     def render(self):
-        img = Image.new('RGBA', (340, 272), 0xffffff)
+        img = Image.new('RGB', (340, 272), (255, 255, 255, 255))
 
         for y in range(16):
             for x in range(20):
@@ -41,7 +41,7 @@ class Plot:
                 y1 = y * 17
                 img.paste(tex, (x1, y1))
 
-        grid = Image.open(os.path.realpath('./dreamfarm/game/assets/grid.png'))
+        grid = Image.open(os.path.realpath('./dreamfarm/game/assets/grid.png')).convert('RGBA')
         img.paste(grid, (0, 0), mask=grid)
 
         ret = io.BytesIO()

@@ -18,8 +18,8 @@ def register():
                 cursor.execute("""INSERT INTO users (duid, name) VALUES (%s, %s)""", (data['user_id'], data['user_name']))
 
                 farm = Farm()
-                for plot, i in farm.generate():
-                    cursor.execute("""INSERT INTO plots (duid, tile_data) VALUES (%s, %s)""", (data['user_id'], plot))
+                for (tiles, objs), i in farm.generate():
+                    cursor.execute("""INSERT INTO plots (duid, tile_data, object_data) VALUES (%s, %s, %s)""", (data['user_id'], tiles, objs))
                     cursor.execute("""INSERT INTO farms (duid, plot_id, plot_num) VALUES(%s, %s, %s)""", (data['user_id'], cursor.lastrowid, i))
 
                 DB.conn.commit()
@@ -41,13 +41,15 @@ def get_plot():
         cursor = DB.conn.cursor()
 
         # Ground layer
-        cursor.execute("""SELECT DISTINCT farms.plot_id, plots.tile_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s AND farms.plot_num=%s""", (user_id, plot_num))
+        cursor.execute("""SELECT DISTINCT farms.plot_id, plots.tile_data, plots.object_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s AND farms.plot_num=%s""", (user_id, plot_num))
         row = cursor.fetchone()
 
         if row is not None:
-            data = row[1]
+            tiles = row[1]
+            objects = row[2]
             plot = Plot()
-            plot.set_tile_data(data)
+            plot.set_tile_data(tiles)
+            plot.set_object_data(objects)
             return send_file(plot.render(), mimetype='image/png')
         else:
             return 'Cannot get plot data', 400
@@ -70,13 +72,15 @@ def get_current_plot():
         plot_num = row[0]
 
         # Ground layer
-        cursor.execute("""SELECT DISTINCT farms.plot_id, plots.tile_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s AND farms.plot_num=%s""", (user_id, plot_num))
+        cursor.execute("""SELECT DISTINCT farms.plot_id, plots.tile_data, plots.object_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s AND farms.plot_num=%s""", (user_id, plot_num))
         row = cursor.fetchone()
 
         if row is not None:
-            data = row[1]
+            tiles = row[1]
+            objects = row[2]
             plot = Plot()
-            plot.set_tile_data(data)
+            plot.set_tile_data(tiles)
+            plot.set_object_data(objects)
             return send_file(plot.render(), mimetype='image/png')
         else:
             return 'Cannot get plot data', 400

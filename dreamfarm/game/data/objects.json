@@ -1,0 +1,23 @@
+{
+	"tree": {
+		"data": {
+			"required_tool": "hatchet",
+			"texture_x": 0,
+			"texture_y": 13
+		}
+	},
+	"brown_leaves": {
+		"data": {
+			"required_tool": "rake",
+			"texture_x": 1,
+			"texture_y": 12
+		}
+	},
+	"weeds": {
+		"data": {
+			"required_tool": "rake",
+			"texture_x": 1,
+			"texture_y": 9
+		}
+	}
+}

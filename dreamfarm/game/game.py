@@ -5,6 +5,7 @@ from dreamfarm.game.redis import Redis
 from dreamfarm.game.textures import Textures
 from dreamfarm.game.tile import Tile
 from dreamfarm.game.crop import Crop
+from dreamfarm.game.obj import Obj
 
 def initialize():
     print('Initializing redis...')
@@ -31,6 +32,17 @@ def initialize():
         Redis.conn.sadd('crops', key)
 
     Crop.create_lookups(list(crops.keys()))
+
+    # Initialize obj data
+    print('Loading obj data...')
+    objs = json.load(open(os.path.realpath('./dreamfarm/game/data/objects.json')))
+
+    for name, obj in objs.items():
+        key = 'obj_' + name
+        Redis.conn.hmset(key, obj['data'])
+        Redis.conn.sadd('objects', key)
+
+    Obj.create_lookups(list(objs.keys()))
 
     print('Pre-rendering textures...')
     Textures.initialize()

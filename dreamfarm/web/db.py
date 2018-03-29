@@ -41,6 +41,7 @@ class DB:
                 `plot_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `duid` bigint(11) unsigned NOT NULL,
                 `tile_data` blob NOT NULL,
+                `object_data` blob NOT NULL,
                 PRIMARY KEY (`plot_id`),
                 KEY `duid` (`duid`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;""")

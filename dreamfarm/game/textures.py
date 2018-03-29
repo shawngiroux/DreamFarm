@@ -30,6 +30,17 @@ class Textures:
             Redis.pstore(key, Textures.atlas.copy().crop((x1, y1, x2, y2)).convert('RGBA'))
             Redis.conn.sadd('textures', key)
 
+        for obj in Redis.conn.smembers('objects'):
+            tx = int(Redis.conn.hget(obj, 'texture_x').decode('utf-8'))
+            ty = int(Redis.conn.hget(obj, 'texture_y').decode('utf-8'))
+            x1 = 16 * tx
+            x2 = x1 + 16
+            y1 = 16 * ty
+            y2 = y1 + 16
+            key = obj.decode('utf-8').replace('obj', 'tex')
+            Redis.pstore(key, Textures.atlas.copy().crop((x1, y1, x2, y2)).convert('RGBA'))
+            Redis.conn.sadd('textures', key)
+
         Redis.pstore('tex_grid', Image.open(os.path.realpath('./dreamfarm/game/assets/grid.png')).convert('RGBA'))
         Redis.conn.sadd('textures', 'tex_grid')
 

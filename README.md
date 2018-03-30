@@ -12,6 +12,9 @@ export DB_PORT="3306"
 export DB_NAME="dreamfarm"
 export DB_USER="your db user here"
 export DB_PASSWD="your password here"
+export REDIS_HOST="127.0.0.1"
+export REDIS_PORT="6379"
+export REDIS_DB="0"
 ```
 
 Running:

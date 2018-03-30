@@ -18,7 +18,7 @@ def register():
                 tiles, objs = farm.gen_new()
 
                 cursor.execute("""INSERT INTO farms (duid, tile_data, object_data) VALUES (%s, %s, %s)""", (data['user_id'], tiles, objs))
-                cursor.execute("""INSERT INTO users (duid, name, current_farm) VALUES (%s, %s, %s)""", (data['user_id'], data['user_name'], cursor.lastrowid))
+                cursor.execute("""INSERT INTO users (duid, name, current_farm, join_date) VALUES (%s, %s, %s, NOW())""", (data['user_id'], data['user_name'], cursor.lastrowid))
 
                 DB.conn.commit()
                 return 'Welcome to your :sparkles:**DREAM FARM**:sparkles:, ' + data['user_name'] + '!', 200

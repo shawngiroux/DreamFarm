@@ -35,5 +35,5 @@ async def commands(client, message):
     if message.content.startswith('$farm'):
         url = remote_host + '/get-current-farm?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
         builder = EmbedBuilder()
-        embed = await builder.build(author + '\'s Farm', 'Current farm', user_id, url, [])
+        embed = await builder.build(author + '\'s :sparkles:**DREAM FARM**:sparkles:', ':moneybag: 24903\n:sunny: Sunny\n:calendar: Day 492, 13:37', user_id, url, [])
         await client.send_message(message.channel, embed=embed)

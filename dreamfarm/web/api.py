@@ -21,7 +21,7 @@ def register():
                 cursor.execute("""INSERT INTO users (duid, name, current_farm) VALUES (%s, %s, %s)""", (data['user_id'], data['user_name'], cursor.lastrowid))
 
                 DB.conn.commit()
-                return 'Welcome to your DREAM FARM, ' + data['user_name'] + '!', 200
+                return 'Welcome to your :sparkles:**DREAM FARM**:sparkles:, ' + data['user_name'] + '!', 200
             except:
                 DB.conn.rollback()
                 return 'DB exception', 400

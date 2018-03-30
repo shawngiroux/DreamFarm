@@ -24,31 +24,22 @@ class DB:
                 `duid` bigint(11) unsigned NOT NULL,
                 `name` varchar(11) NOT NULL DEFAULT '',
                 `money` bigint(11) unsigned NOT NULL DEFAULT '0',
-                `current_plot_num` int(11) unsigned NOT NULL DEFAULT '0',
+                `current_farm` int(11) unsigned NOT NULL DEFAULT '0',
                 PRIMARY KEY (`duid`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
 
             cursor.execute("""CREATE TABLE IF NOT EXISTS `farms` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                `duid` bigint(11) unsigned NOT NULL,
-                `plot_id` int(11) unsigned NOT NULL,
-                `plot_num` int(11) unsigned NOT NULL,
-                PRIMARY KEY (`id`),
-                KEY `duid` (`duid`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;""")
-
-            cursor.execute("""CREATE TABLE IF NOT EXISTS `plots` (
-                `plot_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `farm_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `duid` bigint(11) unsigned NOT NULL,
                 `tile_data` blob NOT NULL,
                 `object_data` blob NOT NULL,
-                PRIMARY KEY (`plot_id`),
+                PRIMARY KEY (`farm_id`),
                 KEY `duid` (`duid`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;""")
 
             cursor.execute("""CREATE TABLE IF NOT EXISTS `crops` (
                 `duid` bigint(11) unsigned NOT NULL,
-                `plot_id` int(11) unsigned NOT NULL,
+                `farm_id` int(11) unsigned NOT NULL,
                 `type` int(11) unsigned NOT NULL DEFAULT '0',
                 `state` int(11) unsigned NOT NULL DEFAULT '0'
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")

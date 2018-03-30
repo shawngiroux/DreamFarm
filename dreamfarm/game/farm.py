@@ -1,4 +1,5 @@
 import io
+import math
 from PIL import Image
 from dreamfarm.game.plot import Plot
 
@@ -8,7 +9,7 @@ class Farm:
 
     def generate(self):
         self.plots = []
-        for i in range(4):
+        for i in range(12):
             self.plots.append(Plot())
             self.plots[i].gen_new()
             yield ((self.plots[i].get_tile_data(), self.plots[i].get_object_data()), i)
@@ -17,13 +18,19 @@ class Farm:
         self.plots.append(plot)
 
     def render(self):
-        img = Image.new('RGB', (680, 544), (255, 255, 255, 255))
+        # Arrange the plots into the closest thing to a square
+        count = len(self.plots)
+        height = math.floor(math.sqrt(count))
+        while count % height != 0:
+            height -= 1
+        width = count // height
 
-        for i, plot in enumerate(self.plots):
-            plot_img = plot.render()
-            x = i % 2
-            y = i // 2
-            img.paste(plot_img, (x * 340, y * 272))
+        img = Image.new('RGB', (340 * width, 272 * height), (255, 255, 255, 255))
+
+        for y in range(height):
+            for x in range(width):
+                plot_img = self.plots[y * width + x].render()
+                img.paste(plot_img, (x * 340, y * 272))
 
         return img
 

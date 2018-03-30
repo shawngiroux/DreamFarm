@@ -56,6 +56,13 @@ class Plot:
     def add_crop(self, crop):
         self.crops.append(crop)
 
+    def render_file(self):
+        img = self.render()
+        ret = io.BytesIO()
+        img.save(ret, format='PNG')
+        ret.seek(0)
+        return ret
+
     def render(self):
         img = Image.new('RGB', (340, 272), (255, 255, 255, 255))
 
@@ -86,7 +93,4 @@ class Plot:
             y = obj.y * 17
             img.paste(tex, (x, y), tex)
 
-        ret = io.BytesIO()
-        img.save(ret, format='PNG')
-        ret.seek(0)
-        return ret
+        return img

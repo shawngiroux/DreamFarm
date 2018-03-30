@@ -32,8 +32,14 @@ async def commands(client, message):
             logger.warn('ERROR: register; user %s; %s %s', user_id, response.status_code, response.reason)
             return ''
 
-    if message.content.startswith('$show') or message.content.startswith('$corn'):
+    if message.content.startswith('$plot') or message.content.startswith('$corn'):
         url = remote_host + '/get-current-plot?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
         builder = EmbedBuilder()
         embed = await builder.build(author + '\'s Farm', 'Current plot', user_id, url, [])
+        await client.send_message(message.channel, embed=embed)
+
+    if message.content.startswith('$farm'):
+        url = remote_host + '/get-farm?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
+        builder = EmbedBuilder()
+        embed = await builder.build(author + '\'s Farm', 'All plots', user_id, url, [])
         await client.send_message(message.channel, embed=embed)

@@ -81,9 +81,33 @@ def get_current_plot():
             plot = Plot()
             plot.set_tile_data(tiles)
             plot.set_object_data(objects)
-            return send_file(plot.render(), mimetype='image/png')
+            return send_file(plot.render_file(), mimetype='image/png')
         else:
             return 'Cannot get plot data', 400
+    else:
+        return 'Incorrect parameters', 400
+
+@api.route('/get-farm', methods=['GET'])
+def get_farm():
+    user_id = request.args.get('duid')
+
+    if user_id is not None:
+        cursor = DB.conn.cursor()
+
+        # Ground layer
+        cursor.execute("""SELECT DISTINCT farms.plot_id, farms.plot_num, plots.tile_data, plots.object_data FROM farms LEFT JOIN plots ON farms.duid = plots.duid WHERE farms.duid=%s ORDER BY farms.plot_num DESC""", (user_id,))
+
+        farm = Farm()
+
+        for row in cursor:
+            tiles = row[2]
+            objects = row[3]
+            plot = Plot()
+            plot.set_tile_data(tiles)
+            plot.set_object_data(objects)
+            farm.add_plot(plot)
+
+        return send_file(farm.render_file(), mimetype='image/png')
     else:
         return 'Incorrect parameters', 400
 

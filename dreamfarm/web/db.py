@@ -25,6 +25,7 @@ class DB:
                 `name` varchar(11) NOT NULL DEFAULT '',
                 `money` bigint(11) unsigned NOT NULL DEFAULT '0',
                 `current_farm` int(11) unsigned NOT NULL DEFAULT '0',
+                `join_date` date NOT NULL,
                 PRIMARY KEY (`duid`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
 

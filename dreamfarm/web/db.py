@@ -45,6 +45,12 @@ class DB:
                 `state` int(11) unsigned NOT NULL DEFAULT '0'
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;""")
 
+            cursor.execute("""CREATE TABLE IF NOT EXISTS `items` (
+                `duid` bigint(11) unsigned NOT NULL,
+                `item_name` VARCHAR(30) unsigned NOT NULL,
+                `item_level` TINYINT unsigned NOT NULL,
+                ) ENGINE=InnoDB DEFAULT CHARTSET=utf8;""")
+
             conn.commit()
         except:
             conn.rollback()

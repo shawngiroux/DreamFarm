@@ -1,0 +1,66 @@
+{
+    "Hands": {
+        "data": {
+            "power": 1.0,
+            "cost": 0,
+            "texture_x": null,
+            "texture_y": null
+        }
+    },
+    "Axes": {
+        "data": {
+            "upgrade_levels": 3,
+            "levels": {
+                "1": {
+                    "name": "Hachet",
+                    "power": 0.8,
+                    "cost": 500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "2": {
+                    "name": "Axe",
+                    "power": 0.6,
+                    "cost": 1500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "3": {
+                    "name": "Chainsaw",
+                    "power": 0.4,
+                    "cost": 3000,
+                    "texture_x": null,
+                    "texture_y": null
+                }
+            }
+        }
+    },
+    "Hoes": {
+        "data": {
+            "upgrade_levels": 3,
+            "levels": {
+                "1": {
+                    "name": "Hoe",
+                    "power": 0.8,
+                    "cost": 500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "2": {
+                    "name": "Hoe Hoe",
+                    "power": 0.6,
+                    "cost": 1500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "3": {
+                    "name": "Merry Christmas",
+                    "power": 0.4,
+                    "cost": 3000,
+                    "texture_x": null,
+                    "texture_y": null
+                }
+            }
+        }
+    }
+}

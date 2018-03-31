@@ -7,6 +7,7 @@ import os
 import binascii
 from dreamfarm.bot.log import logger
 from dreamfarm.bot.embed import EmbedBuilder
+from dreamfarm.game.shop import Shop
 
 api_host = os.environ.get('API_HOST')
 remote_host = os.environ.get('REMOTE_HOST')
@@ -44,3 +45,12 @@ async def commands(client, message):
             []
         )
         await client.send_message(message.channel, embed=embed)
+
+    if message.content.startswith('$shop'):
+        shop = Shop()
+        response = "**Item Types**:\n"
+        item_types = shop.getShopItems()
+        for i, item_name in enumerate(item_types):
+            response += "**{0}**) {1}\n".format(i+1, item_name)
+
+        await client.send_message(message.channel, response)

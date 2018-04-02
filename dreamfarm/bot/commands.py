@@ -33,7 +33,7 @@ async def commands(client, message):
             return ''
 
     if message.content.startswith('$farm'):
-        url = remote_host + '/get-current-farm?duid=' + user_id + '?v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
+        url = remote_host + '/get-current-farm?duid=' + user_id + '&v=' + binascii.b2a_hex(os.urandom(15)).decode('utf-8')
         builder = EmbedBuilder()
         embed = await builder.build(
             author + '\'s :sparkles:**DREAM FARM**:sparkles:',

@@ -34,7 +34,7 @@ class Farm(DB.Base):
             self.tiles = tiles
 
     def render(self):
-        img = Image.new('RGBA', (340, 272), (255, 255, 255, 255))
+        img = Image.new('RGB', (340, 272), (255, 255, 255, 255))
 
         # Render tiles
         for tile in self.tiles:

@@ -19,7 +19,7 @@ def create_app():
 
     print('Initializing database...')
     DB.initialize()
-    game.initialize(True)
+    game.initialize()
 
     global bot_thread
     bot_thread = threading.Thread(target=bot.run)

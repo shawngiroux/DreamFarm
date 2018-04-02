@@ -14,6 +14,8 @@ flask = "*"
 mysqlclient = "*"
 redis = "*"
 numpy = "*"
+sqlalchemy = "*"
+pylint = "*"
 
 
 [dev-packages]

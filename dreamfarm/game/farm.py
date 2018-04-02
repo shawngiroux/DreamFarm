@@ -1,62 +1,69 @@
-import pickle
-import bz2
-import io
-import os
+from sqlalchemy import *
 import numpy as np
 from PIL import Image
-from dreamfarm.game.tile import Tile
-from dreamfarm.game.crop import Crop
+import io
+from sqlalchemy.orm import relationship
+from dreamfarm.db import DB
 from dreamfarm.game.obj import Obj
+from dreamfarm.game.objinfo import ObjInfo
+from dreamfarm.game.tile import Tile
+from dreamfarm.game.tileinfo import TileInfo
 from dreamfarm.game.textures import Textures
 
-# Convert grid notation (A1, D12, etc.) to tile indices
-def coords_to_indices(coords):
-    return (0, 0)
+class Farm(DB.Base):
+    __tablename__ = 'farms'
 
-class Farm:
-    def __init__(self):
-        self.tiles = []
-        self.crops = []
-        self.objects = []
+    id = Column(Integer, primary_key=True)
+    duid = Column(BigInteger, ForeignKey('users.duid'))
 
-    def gen_new(self):
-        # Initialize a 2D array of Tiles with dimensions 16x20
-        self.tiles = []
-        for y in range(16):
-            self.tiles.append([])
-            for x in range(20):
-                self.tiles[y].append(Tile(2, x, y))
+    tiles = relationship('Tile')
+    crops = relationship('Crop')
+    objects = relationship('Obj')
 
-        # Generate some debris
-        self.objects = []
-        obj_points = np.random.randint(0, 10, (20, 16))
-        for (x, y), value in np.ndenumerate(obj_points):
-            if value == 7:
-                self.objects.append(Obj('tree', x, y))
-            elif value == 6:
-                self.objects.append(Obj('brown_leaves', x, y))
-            elif value == 5:
-                self.objects.append(Obj('weeds', x, y))
+    def __init__(self, tiles=None, crops=[], objects=[]):
+        self.crops = crops
+        self.objects = objects
+        if tiles is None:
+            untilled = TileInfo.get_by_name('untilled')
+            self.tiles = []
+            for y in range(16):
+                for x in range(20):
+                    self.tiles.append(Tile(x, y, untilled))
 
-        return (self.get_tile_data(), self.get_object_data())
+            # Generate some debris
+            debris = [
+                ObjInfo.get_by_name('tree'),
+                ObjInfo.get_by_name('weeds'),
+                ObjInfo.get_by_name('brown_leaves')
+            ]
 
-    def get_tile_data(self):
-        return bz2.compress(pickle.dumps(self.tiles))
+            self.objects = []
+            obj_points = np.random.randint(0, 10, (20, 16))
+            for (x, y), value in np.ndenumerate(obj_points):
+                if value == 7:
+                    self.objects.append(Obj(debris[0]))
+                elif value == 6:
+                    self.objects.append(Obj(debris[1]))
+                elif value == 5:
+                    self.objects.append(Obj(debris[2]))
+        else:
+            self.tiles = tiles
 
-    def set_tile_data(self, data):
-        self.tiles = pickle.loads(bz2.decompress(data))
+    def render(self):
+        img = Image.new('RGB', (340, 272), (255, 255, 255, 255))
 
-    def get_object_data(self):
-        return bz2.compress(pickle.dumps(self.objects))
+        # Render tiles
+        for tile in self.tiles:
+            tex = Textures.get(tile.tile_info.texture_x, tile.tile_info.texture_y).resize((17, 17))
+            x1 = tile.x * 17
+            y1 = tile.y * 17
+            img.paste(tex, (x1, y1))
 
-    def set_object_data(self, data):
-        self.objects = pickle.loads(bz2.decompress(data))
+        # Render grid
+        grid = Textures.grid
+        img.paste(grid, (0, 0), mask=grid)
 
-    def set_tile(self, coords, id):
-        return 0
-
-    def add_crop(self, crop):
-        self.crops.append(crop)
+        return img
 
     def render_file(self):
         img = self.render()
@@ -64,35 +71,3 @@ class Farm:
         img.save(ret, format='PNG')
         ret.seek(0)
         return ret
-
-    def render(self):
-        img = Image.new('RGB', (340, 272), (255, 255, 255, 255))
-
-        # Render tiles
-        for y in range(16):
-            for x in range(20):
-                id = self.tiles[y][x].id
-                tex = Textures.get_image(Tile.lookup_by_id[id])
-                x1 = x * 17
-                y1 = y * 17
-                img.paste(tex, (x1, y1))
-
-        # Render grid
-        grid = Textures.get_image('grid')
-        img.paste(grid, (0, 0), mask=grid)
-
-        # Render crops
-        for crop in self.crops:
-            tex = Textures.get_image(Crop.lookup_by_id[crop.id])
-            x = crop.x * 17
-            y = crop.y * 17
-            img.paste(tex, (x, y), tex)
-
-        # Render objects
-        for obj in self.objects:
-            tex = Textures.get_image(Obj.lookup_by_id[obj.id])
-            x = obj.x * 17
-            y = obj.y * 17
-            img.paste(tex, (x, y), tex)
-
-        return img

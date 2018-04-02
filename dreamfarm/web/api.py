@@ -1,53 +1,47 @@
+from datetime import datetime
 from flask import Blueprint, request, send_file
-from dreamfarm.web.db import DB
+from dreamfarm.db import DB
+from dreamfarm.game.user import User
 from dreamfarm.game.farm import Farm
 import os
-import MySQLdb
 
 api = Blueprint('api', __name__)
 
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    if 'user_id' in data and 'user_name' in data:
-        cursor = DB.conn.cursor()
-        cursor.execute("""SELECT * FROM users WHERE duid=%s""", (data['user_id'],))
-        if cursor.fetchone() is None:
-            try:
-                farm = Farm()
-                tiles, objs = farm.gen_new()
+    session = DB.Session()
+    user = session.query(User).filter_by(duid=data['user_id']).first()
+    if user is None:
+        try:
+            user = User(
+                data['user_id'],
+                data['user_name'],
+                datetime.utcnow(),
+                datetime.utcnow()
+            )
+            farm = Farm()
+            user.farms.append(farm)
 
-                cursor.execute("""INSERT INTO farms (duid, tile_data, object_data) VALUES (%s, %s, %s)""", (data['user_id'], tiles, objs))
-                cursor.execute("""INSERT INTO users (duid, name, current_farm, join_date) VALUES (%s, %s, %s, NOW())""", (data['user_id'], data['user_name'], cursor.lastrowid))
+            session.add(user)
+            session.commit()
 
-                DB.conn.commit()
-                return 'Welcome to your :sparkles:**DREAM FARM**:sparkles:, ' + data['user_name'] + '!', 200
-            except:
-                DB.conn.rollback()
-                return 'DB exception', 400
-        else:
-            return data['user_name'] + ' is already playing!', 200
+            return 'Welcome to your :sparkles:**DREAM FARM**:sparkles:, {}'.format(data['user_name']), 200
+        except:
+            session.rollback()
+            return 'DB error', 500
     else:
-        return 'No user ID supplied', 400
+        return '{} is already playing!'.format(data['user_name']), 200
+    return 'No user ID supplied', 400
 
 @api.route('/get-current-farm', methods=['GET'])
 def get_current_farm():
     user_id = request.args.get('duid')
-
-    if user_id is not None:
-        cursor = DB.conn.cursor()
-
-        cursor.execute("""SELECT farms.tile_data, farms.object_data FROM users LEFT JOIN farms ON users.current_farm = farms.farm_id WHERE users.duid=%s""", (user_id,))
-        row = cursor.fetchone()
-
-        if row is not None:
-            tiles = row[0]
-            objects = row[1]
-            farm = Farm()
-            farm.set_tile_data(tiles)
-            farm.set_object_data(objects)
-            return send_file(farm.render_file(), mimetype='image/png')
-        else:
-            return 'Cannot get plot data', 400
+    session = DB.Session()
+    farm = session.query(Farm).filter_by(duid=user_id).order_by(Farm.id).first()
+    if farm is not None:
+        return send_file(farm.render_file(), mimetype='image/png')
     else:
-        return 'Incorrect parameters', 400
+        return 'No farm exists for user', 400
+    session.close()
+    return 'Incorrect parameters', 400

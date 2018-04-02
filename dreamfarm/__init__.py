@@ -4,10 +4,9 @@ import MySQLdb
 import redis
 from flask import Flask
 from dreamfarm.bot import bot
-from dreamfarm.web.db import DB
+from dreamfarm.db import DB
 from dreamfarm.web.controllers import web
 from dreamfarm.web.api import api
-from dreamfarm.game.redis import Redis
 from dreamfarm.game import game
 
 lock = threading.Lock()
@@ -20,8 +19,7 @@ def create_app():
 
     print('Initializing database...')
     DB.initialize()
-
-    game.initialize()
+    game.initialize(True)
 
     global bot_thread
     bot_thread = threading.Thread(target=bot.run)

@@ -1,16 +1,15 @@
-from dreamfarm.game.textures import Textures
+from sqlalchemy import *
+from sqlalchemy.orm import *
+from dreamfarm.db import DB
+from dreamfarm.game.objinfo import ObjInfo
 
-class Obj:
-    lookup_by_id = []
-    lookup_by_name = {}
+class Obj(DB.Base):
+    __tablename__ = 'objects'
 
-    @staticmethod
-    def create_lookups(data):
-        for i in range(len(data)):
-            Obj.lookup_by_id.append(data[i])
-            Obj.lookup_by_name[data[i]] = i
+    id = Column(Integer, primary_key=True)
+    farm_id = Column(Integer, ForeignKey('farms.id'))
+    type_id = Column(Integer, ForeignKey('object_info.id'))
+    object_info = relationship(ObjInfo)
 
-    def __init__(self, name, x, y):
-        self.id = Obj.lookup_by_name[name]
-        self.x = x
-        self.y = y
+    def __init__(self, object_info):
+        self.object_info = object_info

@@ -46,7 +46,12 @@ def get_current_farm():
             if etag == farm.current_ver:
                 return '', 304
         resp = make_response(send_file(farm.render_file(), mimetype='image/png'))
-        resp.set_etag(farm.current_ver)
+        resp.cache_control.no_cache = True
+        resp.cache_control.must_revalidate = True
+        resp.cache_control.max_age = 0
+        resp.cache_control.public = False
+        resp.cache_control.private = True
+        resp.set_etag(str(farm.current_ver))
         return resp
 
     session.close()

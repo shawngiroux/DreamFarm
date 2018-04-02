@@ -37,13 +37,12 @@ def register():
 def get_current_farm():
     user_id = request.args.get('duid')
     etag = request.headers.get('If-None-Match')
-    print(etag)
 
     session = DB.Session()
     farm = session.query(Farm).filter_by(duid=user_id).order_by(Farm.id).first()
     if farm is not None:
         if etag is not None:
-            if etag == farm.current_ver:
+            if etag.replace('"', '') == str(farm.current_ver):
                 return '', 304
         resp = make_response(send_file(farm.render_file(), mimetype='image/png'))
         resp.cache_control.no_cache = True

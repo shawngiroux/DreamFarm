@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, BigInteger, DateTime, String, TIMESTAMP
-from sqlalchemy.orm import relationship
 from dreamfarm.db import DB
+from sqlalchemy import TIMESTAMP, BigInteger, Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class User(DB.Base):
     __tablename__ = 'users'

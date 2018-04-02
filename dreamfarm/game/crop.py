@@ -1,6 +1,7 @@
+from dreamfarm.db import DB
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from dreamfarm.db import DB
+
 
 # Static information about a type of crop
 class CropInfo(DB.Base):
@@ -21,6 +22,7 @@ class CropInfo(DB.Base):
         self.value = value
         self.texture_x = texture_x
         self.texture_y = texture_y
+
 
 # An instance of a crop
 class Crop(DB.Base):

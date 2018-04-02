@@ -1,11 +1,13 @@
 import json
 import os
+
 from dreamfarm.db import DB
-from dreamfarm.game.tile import TileInfo
-from dreamfarm.game.obj import ObjInfo
 from dreamfarm.game.crop import CropInfo
 from dreamfarm.game.item import ItemInfo
+from dreamfarm.game.obj import ObjInfo
 from dreamfarm.game.textures import Textures
+from dreamfarm.game.tile import TileInfo
+
 
 def initialize():
     # Seed the database with static game data
@@ -13,6 +15,7 @@ def initialize():
 
     # Initialize textures
     Textures.initialize()
+
 
 def seed_db():
     # Seed the database with game data

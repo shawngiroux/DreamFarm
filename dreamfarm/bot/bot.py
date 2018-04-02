@@ -1,7 +1,9 @@
-import os
-import discord
 import asyncio
+import os
+
+import discord
 from dreamfarm.bot.commands import commands
+
 
 client = discord.Client()
 api_key = os.environ.get('DISCORD_API_KEY')

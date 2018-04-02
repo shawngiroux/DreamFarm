@@ -1,6 +1,7 @@
+from dreamfarm.db import DB
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from dreamfarm.db import DB
+
 
 # Static information about a type of object
 class ObjInfo(DB.Base):
@@ -26,6 +27,7 @@ class ObjInfo(DB.Base):
         obj = session.query(ObjInfo).filter_by(name=name).first()
         session.close()
         return obj
+
 
 # An instance of an object
 class Obj(DB.Base):

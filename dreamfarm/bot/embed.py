@@ -1,11 +1,14 @@
-import discord
 import asyncio
-import requests
-import json
-import os
 import binascii
+import json
 import logging
+import os
+
+import requests
+
+import discord
 from dreamfarm.bot.log import logger
+
 
 api_host = os.environ.get('API_HOST')
 remote_host = os.environ.get('REMOTE_HOST')

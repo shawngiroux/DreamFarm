@@ -1,6 +1,7 @@
+from dreamfarm.db import DB
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from dreamfarm.db import DB
+
 
 class ItemInfo(DB.Base):
     __tablename__ = 'item_info'
@@ -18,6 +19,7 @@ class ItemInfo(DB.Base):
         self.name = name
         self.upgrade_level = upgrade_level
         self.cost = cost
+
 
 class Item(DB.Base):
     __tablename__ = 'items'

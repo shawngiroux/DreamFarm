@@ -1,6 +1,9 @@
 import os
-import redis
+
 from PIL import Image
+
+import redis
+
 
 class Textures:
     atlas = Image.open(os.path.realpath('./dreamfarm/game/assets/atlas.png'))

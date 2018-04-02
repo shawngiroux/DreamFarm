@@ -1,13 +1,13 @@
 import threading
-import os
-import MySQLdb
-import redis
+
 from flask import Flask
+
 from dreamfarm.bot import bot
 from dreamfarm.db import DB
 from dreamfarm.web.controllers import web
 from dreamfarm.web.api import api
 from dreamfarm.game import game
+
 
 lock = threading.Lock()
 bot_thread = threading.Thread()

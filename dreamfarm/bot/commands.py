@@ -1,14 +1,14 @@
-import discord
-import asyncio
-import requests
 import json
-import logging
 import os
-from dreamfarm.bot.log import logger
-from dreamfarm.bot.embed import EmbedBuilder
 
-api_host = os.environ.get('API_HOST')
-remote_host = os.environ.get('REMOTE_HOST')
+import requests
+
+from dreamfarm.bot.embed import EmbedBuilder
+from dreamfarm.bot.log import logger
+
+
+API_HOST = os.environ.get('API_HOST')
+REMOTE_HOST = os.environ.get('REMOTE_HOST')
 
 # List of bot commands supplied by the user
 async def commands(client, message):
@@ -23,16 +23,16 @@ async def commands(client, message):
         headers = {
             'Content-Type': 'application/json'
         }
-        response = requests.post(api_host + '/register', data=json.dumps(params), headers=headers)
+        response = requests.post(API_HOST + '/register', data=json.dumps(params), headers=headers)
 
-        if (response.status_code == 200):
+        if response.status_code == 200:
             await client.send_message(message.channel, response.text)
         else:
             logger.warn('ERROR: register; user %s; %s %s', user_id, response.status_code, response.reason)
             return ''
 
     if message.content.startswith('$farm'):
-        url = remote_host + '/get-current-farm?duid=' + user_id
+        url = REMOTE_HOST + '/get-current-farm?duid=' + user_id
         builder = EmbedBuilder()
         embed = await builder.build(
             author + '\'s :sparkles:**DREAM FARM**:sparkles:',

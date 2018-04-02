@@ -1,8 +1,10 @@
-from sqlalchemy import *
-from sqlalchemy.orm import *
 from PIL import Image
+
 from dreamfarm.db import DB
 from dreamfarm.game.textures import Textures
+from sqlalchemy import *
+from sqlalchemy.orm import *
+
 
 # Static information about a type of tile
 class TileInfo(DB.Base):
@@ -19,6 +21,7 @@ class TileInfo(DB.Base):
         self.name = name
         self.texture_x = texture_x
         self.texture_y = texture_y
+
 
 # An instance of a tile
 class Tile(DB.Base):

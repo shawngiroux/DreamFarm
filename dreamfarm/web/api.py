@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, request, send_file
+from flask import Blueprint, request, send_file, make_response
 from dreamfarm.db import DB
 from dreamfarm.game.user import User
 from dreamfarm.game.farm import Farm
@@ -36,9 +36,18 @@ def register():
 @api.route('/get-current-farm', methods=['GET'])
 def get_current_farm():
     user_id = request.args.get('duid')
+    etag = request.headers.get('If-None-Match')
+    print(etag)
+
     session = DB.Session()
     farm = session.query(Farm).filter_by(duid=user_id).order_by(Farm.id).first()
     if farm is not None:
-        return send_file(farm.render_file(), mimetype='image/png')
+        if etag is not None:
+            if etag == farm.current_ver:
+                return '', 304
+        resp = make_response(send_file(farm.render_file(), mimetype='image/png'))
+        resp.set_etag(farm.current_ver)
+        return resp
+
     session.close()
     return 'No farm exists for user', 400

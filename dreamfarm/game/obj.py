@@ -6,8 +6,8 @@ from dreamfarm.db import DB
 class ObjInfo(DB.Base):
     __tablename__ = 'object_info'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(20))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), primary_key=True)
     required_tool = Column(String(20))
     texture_x = Column(Integer)
     texture_y = Column(Integer)

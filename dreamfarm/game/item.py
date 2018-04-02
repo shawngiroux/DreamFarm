@@ -5,8 +5,8 @@ from dreamfarm.db import DB
 class ItemInfo(DB.Base):
     __tablename__ = 'item_info'
 
-    id = Column(Integer, primary_key=True)
-    category = Column(String(20))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    category = Column(String(20), primary_key=True)
     name = Column(String(20))
     upgrade_level = Column(Integer)
     cost = Column(Integer)

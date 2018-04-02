@@ -6,8 +6,8 @@ from dreamfarm.db import DB
 class CropInfo(DB.Base):
     __tablename__ = 'crop_info'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(20))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), primary_key=True)
     lifespan = Column(Integer)
     value = Column(Integer)
     texture_x = Column(Integer)

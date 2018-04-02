@@ -1,8 +1,11 @@
-from sqlalchemy import *
+import io
+from datetime import datetime
 import numpy as np
 from PIL import Image
-import io
+from sqlalchemy import *
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.mysql import BIGINT
+import farmhash
 from dreamfarm.db import DB
 from dreamfarm.game.obj import Obj
 from dreamfarm.game.tile import Tile
@@ -14,10 +17,13 @@ class Farm(DB.Base):
 
     id = Column(Integer, primary_key=True)
     duid = Column(BigInteger, ForeignKey('users.duid'), index=True)
+    current_ver = Column(BIGINT(unsigned=True))
 
     tiles = relationship('Tile', backref='farms')
 
     def __init__(self, tiles=None):
+        self.current_ver = farmhash.hash64(datetime.utcnow().isoformat())
+
         if tiles is None:
             # Generate a new farm with some debris
             obj_points = np.random.randint(0, 10, (20, 16))

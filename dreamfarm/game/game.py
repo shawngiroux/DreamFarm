@@ -7,9 +7,9 @@ from dreamfarm.game.crop import CropInfo
 from dreamfarm.game.item import ItemInfo
 from dreamfarm.game.textures import Textures
 
-def initialize(seed=False):
-    if seed:
-        seed_db()
+def initialize():
+    # Seed the database with static game data
+    seed_db()
 
     # Initialize textures
     Textures.initialize()
@@ -21,25 +21,34 @@ def seed_db():
     try:
         tiles = json.load(open(os.path.realpath('./dreamfarm/game/data/tiles.json')))
         for name, tile in tiles.items():
+            current = session.query(TileInfo).filter_by(name=name).first()
             info = TileInfo(
                 name,
                 tile['texture_x'],
                 tile['texture_y']
             )
-            session.add(info)
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
 
         objects = json.load(open(os.path.realpath('./dreamfarm/game/data/objects.json')))
         for name, obj in objects.items():
+            current = session.query(ObjInfo).filter_by(name=name).first()
             info = ObjInfo(
                 name,
                 obj['required_tool'],
                 obj['texture_x'],
                 obj['texture_y']
             )
-            session.add(info)
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
 
         crops = json.load(open(os.path.realpath('./dreamfarm/game/data/crops.json')))
         for name, crop in crops.items():
+            current = session.query(CropInfo).filter_by(name=name).first()
             info = CropInfo(
                 name,
                 crop['lifespan'],
@@ -47,8 +56,13 @@ def seed_db():
                 crop['texture_x'],
                 crop['texture_y']
             )
-            session.add(info)
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
 
         session.commit()
     except:
         session.rollback()
+
+    session.close()

@@ -8,8 +8,8 @@ from dreamfarm.game.textures import Textures
 class TileInfo(DB.Base):
     __tablename__ = 'tile_info'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(20))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), primary_key=True)
     texture_x = Column(Integer)
     texture_y = Column(Integer)
 

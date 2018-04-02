@@ -18,14 +18,10 @@ class DB:
         DB.engine = create_engine('mysql+mysqldb://{}:{}@{}:{}/{}'.format(user, passwd, host, port, db))
 
         # Import our ORM models
-        from dreamfarm.game.tileinfo import TileInfo
-        from dreamfarm.game.cropinfo import CropInfo
-        from dreamfarm.game.iteminfo import ItemInfo
-        from dreamfarm.game.objinfo import ObjInfo
-        from dreamfarm.game.tile import Tile
-        from dreamfarm.game.crop import Crop
-        from dreamfarm.game.item import Item
-        from dreamfarm.game.obj import Obj
+        from dreamfarm.game.tile import Tile, TileInfo
+        from dreamfarm.game.crop import Crop, CropInfo
+        from dreamfarm.game.item import Item, ItemInfo
+        from dreamfarm.game.obj import Obj, ObjInfo
         from dreamfarm.game.farm import Farm
         from dreamfarm.game.user import User
 

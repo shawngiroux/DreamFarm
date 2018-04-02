@@ -12,7 +12,9 @@ class Textures:
         for y in range(16):
             Textures.images.append([])
             for x in range(16):
-                Textures.images[y].append(Textures.atlas.copy().crop((x, y, x + 16, y + 16)).convert('RGBA'))
+                x1 = x * 16
+                y1 = y * 16
+                Textures.images[y].append(Textures.atlas.copy().crop((x1, y1, x1 + 16, y1 + 16)).convert('RGBA'))
 
     @staticmethod
     def get(texture_x, texture_y):

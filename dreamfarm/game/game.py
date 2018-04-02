@@ -1,9 +1,10 @@
 import json
 import os
 from dreamfarm.db import DB
-from dreamfarm.game.tileinfo import TileInfo
-from dreamfarm.game.objinfo import ObjInfo
-from dreamfarm.game.cropinfo import CropInfo
+from dreamfarm.game.tile import TileInfo
+from dreamfarm.game.obj import ObjInfo
+from dreamfarm.game.crop import CropInfo
+from dreamfarm.game.item import ItemInfo
 from dreamfarm.game.textures import Textures
 
 def initialize(seed=False):

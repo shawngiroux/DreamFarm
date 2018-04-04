@@ -24,6 +24,7 @@ class DB:
         from dreamfarm.game.crop import Crop, CropInfo
         from dreamfarm.game.item import Item, ItemInfo
         from dreamfarm.game.obj import Obj, ObjInfo
+        from dreamfarm.game.task import TaskInfo, Task
         from dreamfarm.game.farm import Farm
         from dreamfarm.game.user import User
 

@@ -1,0 +1,8 @@
+{
+	"chop": {
+		"completion_time": 60
+	},
+	"rake": {
+		"completion_time": 30
+	}
+}

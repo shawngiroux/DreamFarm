@@ -2,7 +2,7 @@ import asyncio
 import os
 
 import discord
-from dreamfarm.bot.commands import commands
+from dreamfarm.bot.commands import parse_commands
 
 
 client = discord.Client()
@@ -23,7 +23,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author != client.user:
-        await commands(client, message)
+        await parse_commands(client, message)
 
 def run():
     client.run(api_key)

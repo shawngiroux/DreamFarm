@@ -1,4 +1,5 @@
 import io
+import re
 from datetime import datetime
 
 from PIL import Image
@@ -21,8 +22,24 @@ class Farm(DB.Base):
     id = Column(Integer, primary_key=True)
     duid = Column(BigInteger, ForeignKey('users.duid'), index=True)
     current_ver = Column(BIGINT(unsigned=True))
+    farm_num = Column(Integer)
 
     tiles = relationship('Tile', backref='farms')
+
+    # Convert cell notation (A5) to a point (0, 4)
+    @staticmethod
+    def cell_to_point(cell):
+        if len(cell) > 3:
+            return (-1, -1)
+
+        cell = cell.lower()
+        m = re.search(r'([a-z])([0-9]+)', cell)
+        if m is not None:
+            x = ord(m.group(1)) - 97
+            y = int(m.group(2)) - 1
+            return (x, y)
+
+        return (-1, -1)
 
     def __init__(self, tiles=None):
         self.current_ver = farmhash.hash64(datetime.utcnow().isoformat())

@@ -7,6 +7,7 @@ from dreamfarm.game.item import ItemInfo
 from dreamfarm.game.obj import ObjInfo
 from dreamfarm.game.textures import Textures
 from dreamfarm.game.tile import TileInfo
+from dreamfarm.game.task import TaskInfo
 
 
 def initialize():
@@ -58,6 +59,18 @@ def seed_db():
                 crop['value'],
                 crop['texture_x'],
                 crop['texture_y']
+            )
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
+
+        tasks = json.load(open(os.path.realpath('./dreamfarm/game/data/tasks.json')))
+        for name, task in tasks.items():
+            current = session.query(TaskInfo).filter_by(name=name).first()
+            info = TaskInfo(
+                name,
+                task['completion_time']
             )
             if current is not None:
                 info.id = current.id

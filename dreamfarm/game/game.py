@@ -1,48 +1,84 @@
 import json
 import os
-import redis
-from dreamfarm.game.redis import Redis
+
+from dreamfarm.db import DB
+from dreamfarm.game.crop import CropInfo
+from dreamfarm.game.item import ItemInfo
+from dreamfarm.game.obj import ObjInfo
 from dreamfarm.game.textures import Textures
-from dreamfarm.game.tile import Tile
-from dreamfarm.game.crop import Crop
-from dreamfarm.game.obj import Obj
+from dreamfarm.game.tile import TileInfo
+from dreamfarm.game.task import TaskInfo
+
 
 def initialize():
-    print('Initializing redis...')
-    Redis.initialize()
+    # Seed the database with static game data
+    seed_db()
 
-    # Initialize tile data
-    print('Loading tile data...')
-    tiles = json.load(open(os.path.realpath('./dreamfarm/game/data/tiles.json')))
-
-    for name, tile in tiles.items():
-        key = 'tile_' + name
-        Redis.conn.hmset(key, tile['data'])
-        Redis.conn.sadd('tiles', key)
-
-    Tile.create_lookups(list(tiles.keys()))
-
-    # Initialize crop data
-    print('Loading crop data...')
-    crops = json.load(open(os.path.realpath('./dreamfarm/game/data/crops.json')))
-
-    for name, crop in crops.items():
-        key = 'crop_' + name
-        Redis.conn.hmset(key, crop['data'])
-        Redis.conn.sadd('crops', key)
-
-    Crop.create_lookups(list(crops.keys()))
-
-    # Initialize obj data
-    print('Loading obj data...')
-    objs = json.load(open(os.path.realpath('./dreamfarm/game/data/objects.json')))
-
-    for name, obj in objs.items():
-        key = 'obj_' + name
-        Redis.conn.hmset(key, obj['data'])
-        Redis.conn.sadd('objects', key)
-
-    Obj.create_lookups(list(objs.keys()))
-
-    print('Pre-rendering textures...')
+    # Initialize textures
     Textures.initialize()
+
+
+def seed_db():
+    # Seed the database with game data
+    session = DB.Session()
+
+    try:
+        tiles = json.load(open(os.path.realpath('./dreamfarm/game/data/tiles.json')))
+        for name, tile in tiles.items():
+            current = session.query(TileInfo).filter_by(name=name).first()
+            info = TileInfo(
+                name,
+                tile['texture_x'],
+                tile['texture_y']
+            )
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
+
+        objects = json.load(open(os.path.realpath('./dreamfarm/game/data/objects.json')))
+        for name, obj in objects.items():
+            current = session.query(ObjInfo).filter_by(name=name).first()
+            info = ObjInfo(
+                name,
+                obj['required_tool'],
+                obj['texture_x'],
+                obj['texture_y']
+            )
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
+
+        crops = json.load(open(os.path.realpath('./dreamfarm/game/data/crops.json')))
+        for name, crop in crops.items():
+            current = session.query(CropInfo).filter_by(name=name).first()
+            info = CropInfo(
+                name,
+                crop['lifespan'],
+                crop['value'],
+                crop['texture_x'],
+                crop['texture_y']
+            )
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
+
+        tasks = json.load(open(os.path.realpath('./dreamfarm/game/data/tasks.json')))
+        for name, task in tasks.items():
+            current = session.query(TaskInfo).filter_by(name=name).first()
+            info = TaskInfo(
+                name,
+                task['completion_time']
+            )
+            if current is not None:
+                info.id = current.id
+            merged = session.merge(info)
+            session.add(merged)
+
+        session.commit()
+    except:
+        session.rollback()
+
+    session.close()

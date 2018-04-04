@@ -1,20 +1,14 @@
 {
 	"grass": {
-		"data": {
-			"texture_x": 0,
-			"texture_y": 0
-		}
+		"texture_x": 0,
+		"texture_y": 0
 	},
 	"tilled": {
-		"data": {
-			"texture_x": 0,
-			"texture_y": 1
-		}
+		"texture_x": 0,
+		"texture_y": 1
 	},
 	"untilled": {
-		"data": {
-			"texture_x": 0,
-			"texture_y": 2
-		}
+		"texture_x": 0,
+		"texture_y": 2
 	}
 }

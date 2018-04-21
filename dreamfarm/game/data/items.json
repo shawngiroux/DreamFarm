@@ -1,13 +1,33 @@
 {
-    "Hands": {
+    "hands": {
         "data": {
-            "power": 1.0,
-            "cost": 0,
-            "texture_x": null,
-            "texture_y": null
+            "upgrade_levels": 3,
+            "levels": {
+                "1": {
+                    "name": "Hands of the Peasants",
+                    "power": 0.8,
+                    "cost": 500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "2": {
+                    "name": "Salad Fingers",
+                    "power": 0.6,
+                    "cost": 1500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "3": {
+                    "name": "Nintendo Power Glove",
+                    "power": 0.4,
+                    "cost": 3000,
+                    "texture_x": null,
+                    "texture_y": null
+                }
+            }
         }
     },
-    "Axes": {
+    "axes": {
         "data": {
             "upgrade_levels": 3,
             "levels": {
@@ -35,7 +55,7 @@
             }
         }
     },
-    "Hoes": {
+    "hoes": {
         "data": {
             "upgrade_levels": 3,
             "levels": {
@@ -55,6 +75,34 @@
                 },
                 "3": {
                     "name": "Merry Christmas",
+                    "power": 0.4,
+                    "cost": 3000,
+                    "texture_x": null,
+                    "texture_y": null
+                }
+            }
+        }
+    },
+    "pickaxe": {
+        "data": {
+            "upgrade_levels": 3,
+            "levels": {
+                "1": {
+                    "name": "Chisel",
+                    "power": 0.8,
+                    "cost": 500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "2": {
+                    "name": "Pickaxe",
+                    "power": 0.6,
+                    "cost": 1500,
+                    "texture_x": null,
+                    "texture_y": null
+                },
+                "3": {
+                    "name": "Jackhammer",
                     "power": 0.4,
                     "cost": 3000,
                     "texture_x": null,

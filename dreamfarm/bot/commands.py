@@ -17,6 +17,7 @@ REMOTE_HOST = os.environ.get('REMOTE_HOST')
 async def parse_commands(client, message):
     author = message.author.name
     user_id = message.author.id
+    shop = Shop()
 
     if message.content.startswith('$start'):
         params = {
@@ -93,11 +94,19 @@ async def parse_commands(client, message):
                 logger.warn('ERROR: add-task; user %s; %s %s', user_id, response.status_code, response.reason)
                 return ''
 
-        if message.content.startswith('$shop'):
-            shop = Shop()
-            response = "**Item Types**:\n"
-            item_types = shop.getShopItems()
-            for i, item_name in enumerate(item_types):
-                response += "**{0}**) {1}\n".format(i+1, item_name)
+    if message.content == '$shop':
+        response = "**Item Types**:\n"
+        item_types = shop.getShopItems()
+        for i, item_name in enumerate(item_types):
+            response += "**{0}**) {1}\n".format(i+1, item_name)
 
-            await client.send_message(message.channel, response)
+        await client.send_message(message.channel, response)
+
+    if message.content.startswith('$shop '):
+        requested_item = message.content.split()[1]
+        response = "**Item Types: {0}**:\n".format(requested_item)
+        items = shop.getItemsArray(requested_item)
+        for i, item in enumerate(items):
+            response += "**{0}**) {1} (:moneybag: {2})\n".format(i+1, items[item]['name'], items[item]['cost'])
+
+        await client.send_message(message.channel, response)
